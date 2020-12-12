@@ -1,0 +1,3 @@
+# Speech Recognition Tutorial
+
+**Note**: this repository was created for me learning about face recognition algorithms. Still in development process...
