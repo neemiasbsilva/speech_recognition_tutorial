@@ -12,18 +12,22 @@ def load_waveform(file_path):
     plt.show()
     return signal, sr
 
+# fft
 def apply_fft(signal):
     fft = np.fft.fft(signal)
 
     magnitude = np.abs(fft)
     frequency = np.linspace(0,  sr, len(magnitude))
 
-    plt.plot(frequency, magnitude)
+    left_frequency = frequency[:int(len(frequency)/2)]
+    left_magnitude = magnitude[:int(len(magnitude)/2)]
+
+    plt.plot(left_frequency, left_magnitude)
     plt.xlabel("Frequency")
     plt.ylabel("Magnitude")
     plt.show()
 
-    return magnitude, frequency
+    return left_magnitude, left_frequency
 
 if __name__ == "__main__":
 
