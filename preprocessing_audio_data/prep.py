@@ -12,7 +12,7 @@ def load_waveform(file_path):
     plt.show()
     return signal, sr
 
-# fft
+# fft -> spectrum
 def apply_fft(signal):
     fft = np.fft.fft(signal)
 
@@ -29,13 +29,36 @@ def apply_fft(signal):
 
     return left_magnitude, left_frequency
 
+# stft -> spectrogram
+def apply_stft(signal, sr, n_fft=None, hop_length=None):
+    if n_fft is None:
+        n_fft = 2048 # number of samples
+    if hop_length is None:
+        hop_length = 512 # slide to shift to right
+
+
+    stft = librosa.core.stft(signal, hop_length=hop_length, n_fft=n_fft)
+    
+    spectrogram = np.abs(stft)
+    
+    log_spectrogram = librosa.amplitude_to_db(spectrogram)
+
+    librosa.display.specshow(log_spectrogram, sr=sr, hop_length=hop_length)
+    plt.xlabel("Time")
+    plt.ylabel("Frequency")
+    plt.colorbar()
+    plt.show()
+    return spectrogram
+
+
+
 if __name__ == "__main__":
 
     file_path = "./blues.00000.wav"
 
     signal, sr = load_waveform(file_path)
     magnitude, frequency = apply_fft(signal)
-
+    spectrogram = apply_stft(signal, sr)
 
 
 
