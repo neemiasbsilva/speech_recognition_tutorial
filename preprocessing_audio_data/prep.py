@@ -51,6 +51,23 @@ def apply_stft(signal, sr, n_fft=None, hop_length=None):
     return spectrogram
 
 
+# MFCCs
+def apply_mfcc(signal, n_fft=None, hop_length=None):
+    
+    if n_fft is None:
+        n_fft = 2048 # number of samples
+    if hop_length is None:
+        hop_length = 512 # slide to shift to right
+
+    MFCCs = librosa.feature.mfcc(signal, n_ftt=n_fft, hop_lenght=hop_length, n_mfcc=13)
+
+    librosa.display.specshow(MFCCs, sr=sr, hop_length=hop_length)
+    plt.xlabel("Time")
+    plt.ylabel("MFCC")
+    plt.colorbar()
+    plt.show()
+
+    return MFCCs
 
 if __name__ == "__main__":
 
@@ -59,7 +76,7 @@ if __name__ == "__main__":
     signal, sr = load_waveform(file_path)
     magnitude, frequency = apply_fft(signal)
     spectrogram = apply_stft(signal, sr)
-
+    MFCCs = apply_mfcc(signal)
 
 
 
