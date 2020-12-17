@@ -22,8 +22,8 @@ def plot_history(history):
     fig, axs = plt.subplots(2)
 
     # create accuracy subplot
-    axs[0].plot(history.history["accuracy"], label="train accuracy")
-    axs[0].plot(history.history["val_accuracy"], label="test accuracy")
+    axs[0].plot(history.history["acc"], label="train accuracy")
+    axs[0].plot(history.history["val_acc"], label="test accuracy")
     axs[0].set_ylabel("Accuracy")
     axs[0].set_xlabel("Epochs")
     axs[0].legend(loc="lower right")
