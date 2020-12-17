@@ -25,7 +25,6 @@ def plot_history(history):
     axs[0].plot(history.history["acc"], label="train accuracy")
     axs[0].plot(history.history["val_acc"], label="test accuracy")
     axs[0].set_ylabel("Accuracy")
-    axs[0].set_xlabel("Epochs")
     axs[0].legend(loc="lower right")
     axs[0].set_title("Accuracy eval")
 
@@ -55,9 +54,14 @@ if __name__ == "__main__":
     model = keras.Sequential([
         # input layer
         keras.layers.Flatten(input_shape=(X.shape[1], X.shape[2])),
-        keras.layers.Dense(512, activation="relu"),
-        keras.layers.Dense(256, activation="relu"),
-        keras.layers.Dense(64, activation="relu"),
+        keras.layers.Dense(512, activation="relu", kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(256, activation="relu",
+                           kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.3),
+        keras.layers.Dense(64, activation="relu",
+                           kernel_regularizer=keras.regularizers.l2(0.001)),
+        keras.layers.Dropout(0.25),
         keras.layers.Dense(10, activation="softmax")
     ])
 
@@ -75,3 +79,5 @@ if __name__ == "__main__":
 
     # plot accuracy and error over the epochs
     plot_history(history)
+
+
