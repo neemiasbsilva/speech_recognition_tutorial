@@ -1,6 +1,7 @@
 import json
 import numpy as np
 from sklearn.model_selection import train_test_split
+import tensorflow.keras as keras
 
 DATASET_PATH = "./data.json"
 
@@ -24,6 +25,16 @@ if __name__ == "__main__":
                                             stratify=y,
                                             random_state=777,
                                             shuffle=True)
+    
+    # build the network
+    model = keras.Sequential([
+        # input layer
+        keras.layers.Flatten(input_shape= (X.shape[1], X.shape[2])),
+        keras.layers.Dense(512, activation="relu"),
+        keras.layers.Dense(256, activation="relu"),
+        keras.layers.Dense(64, activation="relu"),
+        keras.layers(10, activation="softmax")
+    ])
     
     
 
