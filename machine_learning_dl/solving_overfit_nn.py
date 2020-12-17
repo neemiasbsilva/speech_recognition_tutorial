@@ -37,6 +37,7 @@ def plot_history(history):
     axs[1].legend(loc="upper right")
     axs[1].set_title("Error eval")
 
+    plt.show()
 
 
 if __name__ == "__main__":
