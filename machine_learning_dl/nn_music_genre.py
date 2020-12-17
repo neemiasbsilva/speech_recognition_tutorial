@@ -33,11 +33,11 @@ if __name__ == "__main__":
         keras.layers.Dense(512, activation="relu"),
         keras.layers.Dense(256, activation="relu"),
         keras.layers.Dense(64, activation="relu"),
-        keras.layers(10, activation="softmax")
+        keras.layers.Dense(10, activation="softmax")
     ])
     
     # compile network
-    opt = keras.optimizer.Adam(learning_rate=0.0001)
+    opt = keras.optimizers.Adam(learning_rate=0.0001)
 
     model.compile(optimizer=opt, loss="sparse_categorical_crossentropy",
                 metrics=["accuracy"])
