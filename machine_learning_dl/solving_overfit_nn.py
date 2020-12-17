@@ -74,5 +74,4 @@ if __name__ == "__main__":
               epochs=100, batch_size=32)
 
     # plot accuracy and error over the epochs
-    print(model.metrics_names)
     plot_history(history)
