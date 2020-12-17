@@ -36,5 +36,11 @@ if __name__ == "__main__":
         keras.layers(10, activation="softmax")
     ])
     
-    
+    # compile network
+    opt = keras.optimizer.Adam(learning_rate=0.0001)
+
+    model.compile(optimizer=opt, loss="sparse_categorical_crossentropy",
+                metrics=["accuracy"])
+
+    model.summary()
 
