@@ -109,5 +109,9 @@ if __name__ == "__main__":
     input_shape = (X_train.shape[1], X_train.shape[2], X_train.shape[3])
     model = build_model(input_shape)
     
+    # compile the network
+    opt = keras.optimizers.Adam(learning_rate=0.0001)
+    model.compile(optimizers=opt, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
     # plot accuracy and error over the epochs
     plot_history(history)
