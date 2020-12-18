@@ -54,9 +54,7 @@ def prepare_datasets(test_size, val_size):
     # create train/val split
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
                                                         test_size=val_size,
-                                                        stratify=y,
-                                                        random_state=777,
-                                                        shuffle=True)
+                                                        random_state=777)
     # 3d array -> (130, 13, 1)
     X_train = X_train[..., np.newaxis] # 4d array -> (nb_samples, 130, 13, 1)
     X_val = X_val[..., np.newaxis]  # 4d array -> (nb_samples, 130, 13, 1)
@@ -68,7 +66,7 @@ def prepare_datasets(test_size, val_size):
 def build_model(input_shape):
 
     # create model
-    model = keras.Sequentia()
+    model = keras.Sequential()
 
     # 1st conv layer
     model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
@@ -100,6 +98,20 @@ def build_model(input_shape):
     return model
 
 
+def predict(model, X, y):
+    if len(X.shape) < 4:
+        X = X[np.newaxis, ...]
+    
+    # predictions = [ [0.1, ...] ]
+    predictions = model.predict(X) # X -> (nb_samples, 130, 13, 1)
+
+    # extract index with max value
+    predicted_index = np.argmax(predictions, axis=1)
+
+    print("Expected index: {}, Predicted index: {}".format(y, predicted_index))
+
+
+
 if __name__ == "__main__":
 
     # create train, validation and test sets
@@ -111,7 +123,7 @@ if __name__ == "__main__":
     
     # compile the network
     opt = keras.optimizers.Adam(learning_rate=0.0001)
-    model.compile(optimizers=opt, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model.compile(loss='sparse_categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
 
     # train the CNN network
     history = model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=32, epochs=100, verbose=1)
@@ -123,3 +135,8 @@ if __name__ == "__main__":
     test_error, test_accuracy = model.evaluate(X_test, y_test, verbose=1)
     print("Accuracy on test set is: {}".format(test_accuracy))
     print("Error on test set is: {}".format(test_error))
+
+    # make prediction on a sample
+    X = X_test[30]
+    y = y_test[30]
+    predict(model, X, y)
