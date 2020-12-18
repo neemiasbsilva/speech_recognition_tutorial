@@ -62,8 +62,42 @@ def prepare_datasets(test_size, val_size):
     X_val = X_val[..., np.newaxis]  # 4d array -> (nb_samples, 130, 13, 1)
     X_test = X_test[..., np.newaxis]  # 4d array -> (nb_samples, 130, 13, 1)
 
-    
+
     return X_train, X_val, X_test, y_train, y_val, y_test
+
+def build_model(input_shape):
+
+    # create model
+    model = keras.Sequentia()
+
+    # 1st conv layer
+    model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
+    model.add(keras.layers.MaxPool2D( (3,3), strides=(2, 2), padding='same'))
+    model.add(keras.layers.BatchNormalization())
+
+    # 2nd conv layer
+    model.add(keras.layers.Conv2D(
+        32, (3, 3), activation='relu', input_shape=input_shape))
+    model.add(keras.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same'))
+    model.add(keras.layers.BatchNormalization())
+
+    # 3rd conv layer
+    model.add(keras.layers.Conv2D(
+        32, (2, 2), activation='relu', input_shape=input_shape))
+    model.add(keras.layers.MaxPool2D((2, 2), strides=(2, 2), padding='same'))
+    model.add(keras.layers.BatchNormalization())
+
+    # flatten the output and feed it int dense layer
+    model.add(keras.layers.Flatten())
+
+    model.add(keras.layers.Dense(64, activation='relu',
+                                 kernel_regularizer=keras.regularizers.l2(0.001)))
+    model.add(keras.layers.Dropout(0.3))
+
+    # output layer
+    model.add(keras.layers.Dense(10, activation='softmax'))
+
+    return model
 
 
 if __name__ == "__main__":
@@ -71,6 +105,9 @@ if __name__ == "__main__":
     # create train, validation and test sets
     X_train, X_val, X_test, y_train, y_val, y_test = prepare_datasets(0.25, 0.2)
 
+    # build the CNN network
+    input_shape = (X_train.shape[1], X_train.shape[2], X_train.shape[3])
+    model = build_model(input_shape)
     
     # plot accuracy and error over the epochs
     plot_history(history)
