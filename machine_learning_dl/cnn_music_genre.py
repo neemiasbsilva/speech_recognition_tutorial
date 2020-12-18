@@ -39,17 +39,37 @@ def plot_history(history):
 
     plt.show()
 
+def prepare_datasets(test_size, val_size):
 
-if __name__ == "__main__":
-
+    # load data
     X, y = get_dataset(DATASET_PATH)
 
-    # split the data into train and test sets
+
+    # create train/test split
     X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                        test_size=0.2,
+                                                        test_size=test_size,
                                                         stratify=y,
                                                         random_state=777,
                                                         shuffle=True)
+    # create train/val split
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
+                                                        test_size=val_size,
+                                                        stratify=y,
+                                                        random_state=777,
+                                                        shuffle=True)
+    # 3d array -> (130, 13, 1)
+    X_train = X_train[..., np.newaxis] # 4d array -> (nb_samples, 130, 13, 1)
+    X_val = X_val[..., np.newaxis]  # 4d array -> (nb_samples, 130, 13, 1)
+    X_test = X_test[..., np.newaxis]  # 4d array -> (nb_samples, 130, 13, 1)
+
+    
+    return X_train, X_val, X_test, y_train, y_val, y_test
+
+
+if __name__ == "__main__":
+
+    # create train, validation and test sets
+    X_train, X_val, X_test, y_train, y_val, y_test = prepare_datasets(0.25, 0.2)
 
     
     # plot accuracy and error over the epochs
