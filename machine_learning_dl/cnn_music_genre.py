@@ -114,7 +114,12 @@ if __name__ == "__main__":
     model.compile(optimizers=opt, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # train the CNN network
-    history = model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=32, epochs=100)
+    history = model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=32, epochs=100, verbose=1)
 
     # plot accuracy and error over the epochs
     plot_history(history)
+
+    # evaluate the CNN on the test set
+    test_error, test_accuracy = model.evaluate(X_test, y_test, verbose=1)
+    print("Accuracy on test set is: {}".format(test_accuracy))
+    print("Error on test set is: {}".format(test_error))
