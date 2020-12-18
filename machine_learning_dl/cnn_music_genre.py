@@ -113,5 +113,8 @@ if __name__ == "__main__":
     opt = keras.optimizers.Adam(learning_rate=0.0001)
     model.compile(optimizers=opt, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
+    # train the CNN network
+    history = model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=32, epochs=100)
+
     # plot accuracy and error over the epochs
     plot_history(history)
