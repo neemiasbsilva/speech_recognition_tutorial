@@ -64,31 +64,14 @@ def build_model(input_shape):
     # create model
     model = keras.Sequential()
 
-    # 1st conv layer
-    model.add(keras.layers.Conv2D(
-        32, (3, 3), activation='relu', input_shape=input_shape))
-    model.add(keras.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same'))
-    model.add(keras.layers.BatchNormalization())
+    # 2 LSTM layers
+    model.add(keras.layers.LSTM(64, input_shape=input_shape, return_sequences=True))
+    model.add(keras.layers.LSTM(64))
 
-    # 2nd conv layer
-    model.add(keras.layers.Conv2D(
-        32, (3, 3), activation='relu', input_shape=input_shape))
-    model.add(keras.layers.MaxPool2D((3, 3), strides=(2, 2), padding='same'))
-    model.add(keras.layers.BatchNormalization())
-
-    # 3rd conv layer
-    model.add(keras.layers.Conv2D(
-        32, (2, 2), activation='relu', input_shape=input_shape))
-    model.add(keras.layers.MaxPool2D((2, 2), strides=(2, 2), padding='same'))
-    model.add(keras.layers.BatchNormalization())
-
-    # flatten the output and feed it int dense layer
-    model.add(keras.layers.Flatten())
-
-    model.add(keras.layers.Dense(64, activation='relu',
-                                 kernel_regularizer=keras.regularizers.l2(0.001)))
+    # dense layer
+    model.add(keras.layers.Dense(64, activation='relu'))
     model.add(keras.layers.Dropout(0.3))
-
+    
     # output layer
     model.add(keras.layers.Dense(10, activation='softmax'))
 
@@ -115,7 +98,7 @@ if __name__ == "__main__":
         0.25, 0.2)
 
     # build the CNN network
-    input_shape = (X_train.shape[1], X_train.shape[2], X_train.shape[3])
+    input_shape = (X_train.shape[1], X_train.shape[2]) # 130, 13
     model = build_model(input_shape)
 
     # compile the network
